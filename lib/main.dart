@@ -35,23 +35,83 @@ class _MyHomePageState extends State<MyHomePage> {
   int number = 0;
   var httpClient = new HttpClient();
 
-  Future<String> getdata() async{
+  Future<http.Response> getdata() async{
+
+    var url = "http://40.124.7.240/isthree/index.php/services/login";
+    var body = json.encode({"userName": emailController.text ,"password":password.text });
+
+    Map headers = {
+      'Content-type' : 'application/json',
+      'Accept': 'application/json',
+    };
 
 
-    http.Response response = await http.get( Uri.encodeFull("https://jsonplaceholder.typicode.com/posts"),
+//    final response = await http.get( Uri.encodeFull("https://jsonplaceholder.typicode.com/posts"),
 
+    final  response = await http.post(url,body: body,
         headers:{
-      "Accept" : "application/json"
+      "Accept" : "application/json",
+
 
     }
+
     );
+
+//    final  response = await http.post(url,body: body,headers: headers);
+    List responseJson = JSON.decode(response.body);
+    print(responseJson[0]["status"]);
+
+    var  status =  responseJson[0]["status"];
+    if(status.toString()=="0"){
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            title: new Text("Invalid Id or Password"),
+            content: new Text("Please Enter Correct Details"),
+            actions: <Widget>[
+              // usually buttons at the bottom of the dialog
+              new FlatButton(
+                child: new Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+
+
+    }
+
+    else
+
+      {
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Dashpage()),
+    );
+
+      }
+    //final signUp = SignUpResponse.fromJson(parse);
+    return response;
+
+
 //print(response.body);
 
-List data = JSON.decode(response.body);
-
-print(data[1]["title"]);
-
-
+//List data = JSON.decode(response.body);
+//
+//print(data[1]["title"]);
+//
+//
+//    Navigator.push(
+//      context,
+//      MaterialPageRoute(builder: (context) => Dashpage()),
+//    );
   }
 
   TextEditingController emailController = new TextEditingController();
@@ -89,7 +149,7 @@ print(data[1]["title"]);
              TextField(controller: emailController, decoration: InputDecoration(border: InputBorder.none,hintText: 'Enter Email ID'),),
              TextField(controller:password,decoration: InputDecoration(border: InputBorder.none,hintText: 'Enter Password'),),
             // TextField(decoration: InputDecoration(border: InputBorder.none,hintText: 'Enter a Name'),),
-              RaisedButton(onPressed: getdata,color: Colors.amber,child: Text('submitsubmitsubmit'),),
+              RaisedButton(onPressed: getdata,color: Colors.amber,child: Text('submit'),),
 
 
 
@@ -132,4 +192,27 @@ print(data[1]["title"]);
 
 
   }
+}
+
+
+class Dashpage extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Home Page"),
+      ),
+      body: Center(
+        child: RaisedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('Go back!'),
+        ),
+      ),
+    );
+  }
+
+
+
 }
