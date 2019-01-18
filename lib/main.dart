@@ -89,7 +89,7 @@ print(data[1]["title"]);
              TextField(controller: emailController, decoration: InputDecoration(border: InputBorder.none,hintText: 'Enter Email ID'),),
              TextField(controller:password,decoration: InputDecoration(border: InputBorder.none,hintText: 'Enter Password'),),
             // TextField(decoration: InputDecoration(border: InputBorder.none,hintText: 'Enter a Name'),),
-              RaisedButton(onPressed: getdata,color: Colors.amber,child: Text('submit'),),
+              RaisedButton(onPressed: getdata,color: Colors.amber,child: Text('submitsubmit'),),
 
 
 
